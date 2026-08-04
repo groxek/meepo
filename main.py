@@ -1,8 +1,42 @@
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
 from routers import tasks
-from fastapi import FastAPI
-
 
 app = FastAPI()
 
+# Указываем FastAPI, где лежат наши HTML-файлы
+templates = Jinja2Templates(directory="templates")
 
 app.include_router(tasks.router)
+
+
+@app.get("/ui/tasks")
+async def tasks_page(request: Request):
+    # Пока что создадим фейковый список словарей, имитирующий ответ из базы
+    mock_tasks_from_db = [
+        {
+            "id": 1,
+            "subject": "Algebra",
+            "title": "Quadratic Systems",
+            "description": "Solve systems of quadratic equations.",
+            "difficulty": "Beginner",
+            "color": "purple",
+            "dot_color": "emerald"
+        },
+        {
+            "id": 2,
+            "subject": "Geometry",
+            "title": "Circle Theorems",
+            "description": "Apply inscribed angle theorems.",
+            "difficulty": "Advanced",
+            "color": "orange",
+            "dot_color": "red"
+        }
+    ]
+    
+    # Отдаем HTML, прокидывая в него переменную tasks
+    return templates.TemplateResponse(
+        request=request,
+        name="tasks.html", 
+        context={"tasks": mock_tasks_from_db}
+    )
