@@ -1,10 +1,16 @@
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from routers import tasks
+from database import engine, Base
+import models
+
+models.Base.metadata.create_all(bind=engine)
+
+
+
 
 app = FastAPI()
 
-# Указываем FastAPI, где лежат наши HTML-файлы
 templates = Jinja2Templates(directory="templates")
 
 app.include_router(tasks.router)
@@ -12,7 +18,6 @@ app.include_router(tasks.router)
 
 @app.get("/ui/tasks")
 async def tasks_page(request: Request):
-    # Пока что создадим фейковый список словарей, имитирующий ответ из базы
     mock_tasks_from_db = [
         {
             "id": 1,
