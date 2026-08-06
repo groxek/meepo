@@ -8,7 +8,6 @@ models.Base.metadata.create_all(bind=engine)
 
 
 
-
 app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
@@ -39,7 +38,6 @@ async def tasks_page(request: Request):
         }
     ]
     
-    # Отдаем HTML, прокидывая в него переменную tasks
     return templates.TemplateResponse(
         request=request,
         name="tasks.html", 
