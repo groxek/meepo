@@ -4,6 +4,6 @@ from config import settings
 
 engine = create_async_engine(settings.DATABASE_URL, echo=True)
 
-AsyncSessionLocal = async_sessionmaker(bind=engine, autoflush=False, autocommit=False)
+AsyncSessionLocal = async_sessionmaker(bind=engine, autoflush=False, autocommit=False, expire_on_commit=False)
 
 Base = declarative_base()
