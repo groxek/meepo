@@ -25,14 +25,12 @@ class AttemptBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
-    pass
 
 class SubjectCreate(SubjectBase):
     pass
 
 class TaskCreate(TaskBase):
     answer: str | int
-    pass
 
 class AttemptCreate(AttemptBase):
     pass
@@ -41,15 +39,27 @@ class AttemptCreate(AttemptBase):
 
 
 
-class User(UserBase):
+class UserResponse(UserBase):
     id: int
+    
+    class Config:
+        from_attributes = True
 
-class Subject(SubjectBase):
+class SubjectResponse(SubjectBase):
     id: int
+    
+    class Config:
+        from_attributes = True
 
-class Task(TaskBase):
+class TaskResponse(TaskBase):
     id: int
+    
+    class Config:
+        from_attributes = True
 
-class Attempt(AttemptBase):
+class AttemptResponse(AttemptBase):
     id: int
     is_correct: bool
+    
+    class Config:
+        from_attributes = True
