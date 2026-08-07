@@ -15,6 +15,20 @@
   .card-glow {
     background: radial-gradient(600px circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.06), transparent 40%);
   }
+  .filter-scroll::-webkit-scrollbar { height: 4px; }
+  .filter-scroll::-webkit-scrollbar-thumb {
+    background: rgba(115,115,115,0.4);
+    border-radius: 9999px;
+  }
+  .leading-relaxed img {
+      height: 2.5em !important;
+      transform: translateY(6px);
+      margin: 0 6px !important;
+  }
+
+  article .max-h-96 {
+      filter: invert(1) brightness(1.2);
+  }
 </style>
 </head>
 <body class="bg-black text-neutral-200 min-h-screen">
@@ -40,52 +54,211 @@
   </nav>
 
   <main class="max-w-7xl mx-auto px-6 py-12">
-    <div class="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-      <div>
-        <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Your Tasks</h1>
-        <p class="text-neutral-500 mt-2 text-sm md:text-base">Pick a subject and sharpen your problem-solving skills.</p>
-      </div>
-      <div class="flex items-center gap-3">
-        <button class="rounded-lg border border-neutral-800 bg-neutral-950 text-neutral-300 text-sm font-medium px-4 py-2 hover:border-neutral-700 hover:text-white transition-colors">
-          All Subjects
-        </button>
-        <button class="rounded-lg border border-neutral-800 bg-neutral-950 text-neutral-300 text-sm font-medium px-4 py-2 hover:border-neutral-700 hover:text-white transition-colors">
-          Difficulty
-        </button>
+
+    <!-- Page Header -->
+    <div class="mb-8 flex flex-col max-w-3xl mx-auto w-full">
+      <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Your Tasks</h1>
+      <p class="text-neutral-500 mt-2 text-sm md:text-base">Pick a subject and sharpen your problem-solving skills.</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="mb-10 max-w-3xl mx-auto w-full">
+      <div class="rounded-2xl border border-neutral-800 bg-neutral-950/60 backdrop-blur-sm p-4 md:p-5 flex flex-col gap-4">
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <!-- Subject dropdown -->
+          <div class="relative flex-1">
+            <select class="w-full appearance-none rounded-xl border border-neutral-800 bg-neutral-900 text-sm text-neutral-200 font-medium pl-4 pr-10 py-2.5 hover:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-colors">
+              <option>All Subjects</option>
+              <option>Профильная математика</option>
+              <option>Русский язык</option>
+            </select>
+            <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </div>
+
+          <!-- Task type / number dropdown -->
+          <div class="relative flex-1">
+            <select class="w-full appearance-none rounded-xl border border-neutral-800 bg-neutral-900 text-sm text-neutral-200 font-medium pl-4 pr-10 py-2.5 hover:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-colors">
+              <option>All Numbers</option>
+              {% for n in range(1, 13) %}
+              <option>Номер {{ n }}</option>
+              {% endfor %}
+            </select>
+            <svg xmlns="http://www.w3.org/2000/svg" class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </div>
+
+          <!-- Clear filters -->
+          <button type="button" class="shrink-0 rounded-xl border border-neutral-800 bg-neutral-900 text-sm font-medium text-neutral-400 px-4 py-2.5 hover:border-neutral-700 hover:text-white transition-colors">
+            Reset
+          </button>
+        </div>
+
+        <!-- Difficulty toggle pills -->
+        <div class="flex items-center gap-2 overflow-x-auto filter-scroll pb-1 -mb-1">
+          <span class="text-xs font-semibold uppercase tracking-wider text-neutral-500 shrink-0 mr-1">Difficulty</span>
+          <button type="button" class="shrink-0 rounded-full border border-white bg-white text-black text-xs font-semibold px-3.5 py-1.5 transition-colors">
+            All
+          </button>
+          <button type="button" class="shrink-0 rounded-full border border-neutral-800 bg-neutral-900 text-neutral-300 text-xs font-medium px-3.5 py-1.5 hover:border-emerald-500/40 hover:text-emerald-400 transition-colors">
+            Easy
+          </button>
+          <button type="button" class="shrink-0 rounded-full border border-neutral-800 bg-neutral-900 text-neutral-300 text-xs font-medium px-3.5 py-1.5 hover:border-amber-500/40 hover:text-amber-400 transition-colors">
+            Medium
+          </button>
+          <button type="button" class="shrink-0 rounded-full border border-neutral-800 bg-neutral-900 text-neutral-300 text-xs font-medium px-3.5 py-1.5 hover:border-rose-500/40 hover:text-rose-400 transition-colors">
+            Hard
+          </button>
+        </div>
+
       </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Feed -->
+    <div class="flex flex-col gap-6 max-w-3xl mx-auto w-full">
 
       {% for task in tasks %}
-      <div class="group relative rounded-2xl border border-neutral-800 bg-neutral-950 p-6 transition-all duration-300 hover:border-neutral-700 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50">
-        <div class="flex items-start justify-between mb-6">
-          <span class="text-xs font-semibold uppercase tracking-wider text-{{ task.color }}-400 bg-{{ task.color }}-500/10 border border-{{ task.color }}-500/20 rounded-full px-3 py-1">
-            {{ task.subject }}
+      <article
+        onmousemove="const r=this.getBoundingClientRect();this.style.setProperty('--x',(event.clientX-r.left)+'px');this.style.setProperty('--y',(event.clientY-r.top)+'px');"
+        class="card-glow group relative flex flex-col w-full rounded-2xl border border-neutral-800 bg-neutral-950/70 backdrop-blur-sm p-6 md:p-8 transition-all duration-300 hover:border-neutral-700 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50"
+      >
+
+        <div class="flex items-start justify-between gap-3 mb-6">
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-3 py-1">
+            {{ task.subject.name }}
           </span>
-          <span class="text-xs font-medium text-neutral-500">Task #{{ task.id }}</span>
+          <span class="shrink-0 text-xs font-medium text-neutral-500">Task #{{ task.id }}</span>
         </div>
-        <h3 class="text-lg font-semibold text-white mb-2">{{ task.title }}</h3>
-        <p class="text-sm text-neutral-500 mb-6 leading-relaxed">
-          {{ task.description }}
-        </p>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-{{ task.dot_color }}-500"></span>
-            <span class="text-xs text-neutral-500">{{ task.difficulty }}</span>
+
+        <div class="text-base text-neutral-300 mb-6 leading-relaxed">
+          {{ task.question | safe }}
+        </div>
+
+        {% if task.images %}
+        <div class="mb-8 flex flex-col gap-4">
+          {% for img_url in task.images %}
+            <div class="rounded-xl border border-neutral-800 bg-white/90 p-4 flex justify-center overflow-hidden">
+              <img src="{{ img_url }}" alt="Чертеж к задаче" class="max-h-96 w-auto object-contain">
+            </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="mt-auto pt-4 border-t border-neutral-800/50">
+          <div class="flex items-center gap-1.5 mb-4">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span class="text-xs text-neutral-500">ЕГЭ Профиль</span>
           </div>
-          <button class="text-sm font-medium text-white flex items-center gap-1 group-hover:gap-2 transition-all">
-            Start
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-          </button>
+
+          <form
+            data-task-id="{{ task.id }}"
+            class="task-answer-form flex items-center gap-2"
+            onsubmit="return false;"
+          >
+            <input
+              type="text"
+              name="answer"
+              placeholder="Ваш ответ..."
+              autocomplete="off"
+              class="flex-1 rounded-xl border border-neutral-800 bg-neutral-900 text-sm text-neutral-200 placeholder-neutral-600 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-neutral-700 transition-colors"
+            >
+            <button
+              type="submit"
+              class="shrink-0 rounded-xl bg-white text-black text-sm font-semibold px-4 py-2.5 hover:bg-neutral-200 transition-colors"
+            >
+              Отправить
+            </button>
+          </form>
+
+          <div class="task-answer-feedback hidden mt-3 text-sm font-medium"></div>
         </div>
+
+      </article>
+      {% else %}
+      <div class="rounded-2xl border border-dashed border-neutral-800 bg-neutral-950/50 p-12 text-center">
+        <p class="text-neutral-500 text-sm">No tasks match your filters yet. Try adjusting them above.</p>
       </div>
       {% endfor %}
 
     </div>
   </main>
+
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const forms = document.querySelectorAll('.task-answer-form');
+
+    forms.forEach(form => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+
+        const taskId = form.dataset.taskId;
+        const input = form.querySelector('input[name="answer"]');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const answer = input.value.trim();
+        const feedbackDiv = form.nextElementSibling; 
+
+        if (!answer) return;
+
+        const token = localStorage.getItem('access_token');
+
+        if (!token) {
+          feedbackDiv.textContent = 'Ошибка: Вы не авторизованы! Залогиньтесь.';
+          feedbackDiv.className = 'task-answer-feedback mt-3 text-sm font-medium text-rose-500 block';
+          return;
+        }
+
+        try {
+          input.disabled = true;
+          submitBtn.disabled = true;
+
+          const response = await fetch(`/tasks/${taskId}/attempt`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ answer: answer })
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            feedbackDiv.textContent = data.detail || 'Ошибка сервера';
+            feedbackDiv.className = 'task-answer-feedback mt-3 text-sm font-medium text-rose-500 block';
+            input.disabled = false;
+            submitBtn.disabled = false;
+            return;
+          }
+
+          feedbackDiv.textContent = data.message;
+          
+          if (data.is_correct) {
+            feedbackDiv.className = 'task-answer-feedback mt-3 text-sm font-medium text-emerald-500 block';
+            input.classList.add('border-emerald-500/50', 'text-emerald-400');
+          } else {
+            feedbackDiv.className = 'task-answer-feedback mt-3 text-sm font-medium text-rose-500 block';
+            input.disabled = false;
+            submitBtn.disabled = false;
+            input.value = '';
+            input.focus();
+          }
+
+        } catch (error) {
+          feedbackDiv.textContent = 'Не удалось связаться с сервером';
+          feedbackDiv.className = 'task-answer-feedback mt-3 text-sm font-medium text-rose-500 block';
+          input.disabled = false;
+          submitBtn.disabled = false;
+        }
+      });
+    });
+  });
+</script>
 
 </body>
 </html>

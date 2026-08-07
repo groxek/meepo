@@ -13,6 +13,7 @@ class SubjectBase(BaseModel):
 class TaskBase(BaseModel):
     subject_id: int
     question: str
+    images: list[str] = []
 
 class AttemptBase(BaseModel):
     user_id: int
@@ -63,3 +64,8 @@ class AttemptResponse(AttemptBase):
     
     class Config:
         from_attributes = True
+
+
+
+class UserAnswer(BaseModel):
+    answer: str
