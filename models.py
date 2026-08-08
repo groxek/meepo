@@ -26,7 +26,8 @@ class Task(Base):
     subject_id = Column(Integer, ForeignKey("subjects.id"))
     question = Column(String)
     answer = Column(String)
-    images = Column(JSON, default=[])
+    images = Column(JSON, default=list)
+    ege_number = Column(Integer)
 
     subject = relationship("Subject", back_populates="tasks")
     attempts = relationship("Attempt", back_populates="task")

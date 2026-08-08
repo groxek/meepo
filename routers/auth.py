@@ -8,10 +8,11 @@ from sqlalchemy import select
 from models import User
 from schemas import UserCreate, UserResponse
 from dependencies import get_db
+from config import settings
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-SECRET_KEY = "my_super_secret_meepo_key_123"
+SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = "HS256"
 
 def hash_password(password: str) -> str:

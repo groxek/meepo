@@ -6,8 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import AsyncSessionLocal
 from models import User
+from config import settings
 
-SECRET_KEY = "my_super_secret_meepo_key_123"
+SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = "HS256"
 
 security = HTTPBearer()

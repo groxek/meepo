@@ -5,7 +5,7 @@ from sqlalchemy.sql.expression import func
 
 from models import Task, User, Attempt
 from dependencies import get_current_user, get_db
-from schemas import UserAnswer
+from schemas import UserAnswer, TaskResponse
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
@@ -13,7 +13,7 @@ router = APIRouter(prefix="/tasks", tags=["tasks"])
 async def get_tasks():
     return {"message": "yoo"}
 
-@router.get("/random")
+@router.get("/random", response_model=TaskResponse)
 async def get_random_task(
     current_user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db)
@@ -23,16 +23,9 @@ async def get_random_task(
     random_task = result.scalar_one_or_none()
     
     if not random_task:
-        return {"error": "База задач пуста"}
+        raise HTTPException(status_code=404, detail="База задач пуста")
         
-    return {
-            "id": random_task.id,
-            "subject_id": random_task.subject_id,
-            "question": random_task.question,
-            "answer": random_task.answer,
-            "images": random_task.images,
-            "requested_by": current_user.username
-        }
+    return random_task
 
 @router.post("/{task_id}/attempt")
 async def submit_attempt(
@@ -48,7 +41,10 @@ async def submit_attempt(
     if not task:
         raise HTTPException(status_code=404, detail="Задача не найдена")
 
-    is_correct = (str(task.answer).strip().lower() == str(user_answer.answer).strip().lower())
+    correct_ans = str(task.answer).strip().replace(',', '.').lower()
+    user_ans = str(user_answer.answer).strip().replace(',', '.').lower()
+
+    is_correct = (correct_ans == user_ans)
 
     new_attempt = Attempt(
         user_id=current_user.id,
