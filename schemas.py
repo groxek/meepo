@@ -1,7 +1,4 @@
-from pydantic import BaseModel
-
-
-
+from pydantic import BaseModel, Field
 
 
 class UserBase(BaseModel):
@@ -21,11 +18,8 @@ class AttemptBase(BaseModel):
     user_input: str
 
 
-
-
-
 class UserCreate(UserBase):
-    password: str
+    password: str = Field(min_length=8)
 
 class SubjectCreate(SubjectBase):
     pass
@@ -35,9 +29,6 @@ class TaskCreate(TaskBase):
 
 class AttemptCreate(AttemptBase):
     pass
-
-
-
 
 
 class UserResponse(UserBase):
