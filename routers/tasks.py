@@ -15,10 +15,22 @@ async def get_tasks():
 
 @router.get("/random", response_model=TaskResponse)
 async def get_random_task(
+    subject_id: int | None = None,
+    ege_number: int | None = None,
     current_user: User = Depends(get_current_user),
-    session: AsyncSession = Depends(get_db)
+    session: AsyncSession = Depends(get_db),
 ):
-    stmt = select(Task).order_by(func.random()).limit(1)
+    stmt = select(Task)
+
+    if subject_id is not None:
+        stmt = stmt.where(Task.subject_id == subject_id)
+
+    if ege_number is not None:
+        stmt = stmt.where(Task.ege_number == ege_number)
+
+    stmt = stmt.order_by(func.random()).limit(1)
+
+
     result = await session.execute(stmt)
     random_task = result.scalar_one_or_none()
     
