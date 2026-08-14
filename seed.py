@@ -23,12 +23,14 @@ async def seed_db():
         task1 = Task(
             subject_id=math.id, 
             question="Решите уравнение: x^2 - 4 = 0. В ответ запишите больший корень.", 
-            answer="2"
+            answer="2",
+            ege_number=1
         )
         task2 = Task(
             subject_id=inf.id, 
             question="Сколько единиц содержит двоичная запись числа 1023?", 
-            answer="10"
+            answer="10",
+            ege_number=2
         )
         
         session.add_all([task1, task2])

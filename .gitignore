@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+
+.deletethis.py
+
 # Distribution / packaging
 .Python
 build/
