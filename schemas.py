@@ -10,7 +10,8 @@ class SubjectBase(BaseModel):
 class TaskBase(BaseModel):
     subject_id: int
     question: str
-    images: list[str] = []
+    images: list[str] = Field(default_factory=list)
+    ege_number: int | None = None
 
 class AttemptBase(BaseModel):
     user_id: int
